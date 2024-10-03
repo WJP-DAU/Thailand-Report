@@ -32,22 +32,26 @@
 modules <- c(
   "settings", "functions")
 
+
 for (mod in modules){
   source(
     paste0("code/",mod,".R")
   )
 }
 
+# data point
+
 # load data - replace with SP path
 master_data <- read.xlsx(
   file.path(
     "C:/Users/icoddington/Downloads/FINAL_2024_wjp_rule_of_law_index_HISTORICAL_DATA_FILE.xlsx"
   ),
-  sheet = "Historical Data"
+  sheet = "Historical Data",
+  check.names = FALSE
 ) %>%
   filter(
-    (Year %in% c("2023", "2024") & 
-       (Country %in% c(
+    # (Year %in% c("2023", "2024") & 
+       Country %in% c(
          "Thailand",
          "Malaysia", 
          "Indonesia",
@@ -56,9 +60,11 @@ master_data <- read.xlsx(
          "Philippines", 
          "Myanmar", 
          "Cambodia")
-        )
-     ) 
-    ) %>% clean_names()
+        
+     )  %>%
+  rename_with(
+    ~ ifelse(grepl("^[0-9]", .x), substr(.x, 1, 3), .x)
+  )
     
 
 # replace with SP path
@@ -76,8 +82,8 @@ outline <- read.xlsx(
 
 chart_list <- setNames(
   as.list(outline %>% pull(id)), 
-  outline %>% pull(id)  
-)
+  outline %>% pull(id))
+  
 
 data_points <- map(chart_list, function(chart) {
   # Call the wrangleData function for each chart id

@@ -62,12 +62,14 @@ callVisualizer <- function(figid){
   
   data4chart <- data_points[[figid]]
   
-  if (type == "bars"){
-    chart <- genBars(data4chart)
+  # three dumbells
+  if (type == "dumbells"){
+    chart <- genDumbell(data4chart)
   }
   
-  if (type == "slope"){
-    chart <- genSlope(data4chart)
+  # three radars
+  if (type == "radar"){
+    chart <- genRadar(data4chart)
   }
   
   # Save chart locally
@@ -94,40 +96,43 @@ callVisualizer <- function(figid){
 ## +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 wrangleData <- function(figid){
-  var <- outline %>% filter(id %in% figid) %>%
-    pull(var_id)
   
-  type <- outline %>% filter(id %in% figid) %>%
-    pull(type)
-  var <- gsub(" ", "_", var)    
-  var <- gsub("-", "_", var) 
-  var <- gsub("\\.", "_", var)  
-  var <- paste0("x", var)
-  var <- tolower(var)
+  # pull all variables for each chart
+  chart <- outline %>% filter(id %in% figid) %>%
+    pull(id)
+
+  variables <- outline %>% 
+    filter(id %in% chart) %>% 
+    select(var_id1, var_id2, var_id3, var_id4, var_id5, var_id6) %>% as.list()
   
-  # for bars, all countries and 2024 vals only
-  if (type == "bars"){
-    data2plot <- master_data %>% filter(
-      year == "2024"
-    ) %>% select(country, all_of(var)) %>% rename(
-      value2plot = var
-    )
+  
+  if (figid %in% c("F5", "F6")) {
+    variables <- c(variables, var_id7 = 8.4)
   }
   
-  if (type == "slope"){
-    data2plot <- master_data %>% filter(
-      (country == 'Thailand')) %>%
+  variables <- as.character(unlist(variables))
+  
+  
+  type <- outline %>% filter(id %in% figid) %>%
+    pull(first(type))
+  
+  # for dumbells, all countries and 2024 vals only
+  if (type == "dumbell") {
+    data2plot <- master_data %>%
+      filter(Year == "2024") %>%
+      select(Country, all_of(variables)) 
+  }
+  
+  
+  if (type == "radar"){
+    data2plot <- master_data %>% filter((Year %in% c("2015","2024")) &
+      (Country == 'Thailand')) %>%
         select(
-          country, 
-          year, 
-          all_of(var)) %>%
-        pivot_wider(names_from = year, 
-                    values_from = all_of(var), 
-                    names_prefix = "Year_") %>%
-        rename(
-          value2plot_2023 = Year_2023,
-          value2plot_2024 = Year_2024
-        )
+          Country, 
+          Year, 
+          all_of(variables)) %>%
+        pivot_wider(names_from = Year, 
+                    values_from = all_of(variables))
   }
   
   return (data2plot)
