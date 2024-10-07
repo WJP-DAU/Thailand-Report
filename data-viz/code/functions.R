@@ -85,7 +85,7 @@ callVisualizer <- function(figid){
   saveIT(
     chart = chart,
     figid = figid,
-    w = 189.7883,
+    w = 200.7883,
     h = 168.7007
   )
   
@@ -108,23 +108,23 @@ wrangleData <- function(figid){
   # names of indicators
   metric_labels <- c(
     "4.1" = "Equal treatment and\n absence of discrimination" ,
-    "4.3" = "Due process of the law\n and rights of the accused",
-    "4.5" = "Freedom of belief and\n religion is effectively guaranteed",
+    "4.3" = "Due process of the law\n and rights of \nthe accused",
+    "4.5" = "Freedom of belief and\n religion is \neffectively guaranteed",
     "4.6" = "Freedom from arbitrary\n interference with privacy is \n effectively guaranteed",
     "4.8" = "Fundamental labor\n rights are \neffectively guaranteed",
-    "6.5" = "The government does\nnot expropriate without \n lawful process and adequate compensation",
+    "6.5" = "The government does\nnot expropriate without \n lawful process and \nadequate compensation",
     "1.5" = "Government powers are\n subject to non-governmental checks",
     "3.2" =  "Right to information",
     "3.3" = "Civic participation",
     "3.4" = "Complaint mechanisms",
-    "4.4" = "Freedom of opinion and\n expression is effectively guaranteed",
-    "4.7" = "Freedom of assembly and\n association is effectively guaranteed",
-    "4.3" = "Due process of the\n law and rights of the accused",
+    "4.4" = "Freedom of opinion\n and expression is\n effectively guaranteed",
+    "4.7" = "Freedom of assembly\n and association is\n effectively guaranteed",
+    "4.3" = "Due process of the\n law and rights of\n the accused",
     "6.3" = "Administrative proceedings are\n conducted without \n unreasonable delay",
-    "8.7" = "Due process of the law\n and rights of the accused",
+    "8.7" = "Due process of the law\n and rights of\n the accused",
     "7.1" = "People can access and\n afford civil justice",
     "7.4" = "Civil justice is free of\n improper government influence",
-    "8.6" = "Criminal system is free of\n improper government influence",
+    "8.6" = "Criminal system is free\n of improper government\n influence",
     "8.4" = "Criminal system is impartial",
     "4.2" = "The right to life and security\n of the person is \neffectively guaranteed"
   )
