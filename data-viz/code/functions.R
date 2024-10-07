@@ -107,7 +107,7 @@ callVisualizer <- function(figid){
 wrangleData <- function(figid){
   # names of indicators
   metric_labels <- c(
-    "4.1" = "Equal treatment and\n absence of discrimination" ,
+    "4.1" = "Equal treatment and\n absence of\n discrimination" ,
     "4.3" = "Due process of the law\n and rights of \nthe accused",
     "4.5" = "Freedom of belief and\n religion is \neffectively guaranteed",
     "4.6" = "Freedom from arbitrary\n interference with privacy is \n effectively guaranteed",
@@ -126,7 +126,7 @@ wrangleData <- function(figid){
     "7.4" = "Civil justice is free of\n improper government influence",
     "8.6" = "Criminal system is free\n of improper government\n influence",
     "8.4" = "Criminal system is impartial",
-    "4.2" = "The right to life and security\n of the person is \neffectively guaranteed"
+    "4.2" = "The right to \nlife and security\n of the person is \neffectively guaranteed"
   )
   
   # pull all variables for each chart

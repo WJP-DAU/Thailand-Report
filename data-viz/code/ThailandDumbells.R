@@ -31,12 +31,12 @@ genDumbell <- function(data)
     scale_color_manual(values = colors4plot) +
     coord_cartesian(clip = "off") +
     WJP_theme() +  # Custom theme
-    theme(legend.position = "bottom",
+    theme(legend.position = "none",
           panel.grid.major.x = element_line(colour = "#d1cfd1", size = 0.5),
           panel.grid.major.y = element_blank(),
           panel.background = element_blank(),
           panel.grid.minor = element_blank(),
-          legend.text = element_text(family = "Lato Bold"),
+          legend.text = element_blank(),
           axis.title.y = element_blank(),
           axis.ticks.y = element_blank(),
           axis.title.x = element_blank(),
