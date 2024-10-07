@@ -150,7 +150,6 @@ wrangleData <- function(figid){
   # for dumbells, all countries and 2024 vals only
   if (type == "dumbell") {
     thailand_report <- master_data %>%
-      filter(Country %in% c("Thailand", "Malaysia", "Indonesia", "Vietnam", "Philippines", "Myanmar", "Cambodia")) %>%
       filter(Year == 2024) %>%
       select(Country, Year, all_of(variables)) %>%
       pivot_longer(cols = !c(Country, Year), 
@@ -183,8 +182,8 @@ wrangleData <- function(figid){
       ) %>%
       # order var to use wjp_radar
       mutate(order_var = row_number(),
-             label_var = recode(Metric, !!!metric_labels),
-             Metric = as.factor(Metric)
+             label_var = as.character(recode(Metric, !!!metric_labels)),
+             Metric = as.factor(Metric) 
       )
   }
   

@@ -194,14 +194,14 @@ wjp_radar <- function(
     ) +
     
     # Then, we add the axis labels
-    geom_richtext(
+    geom_text(
       data  = text_coords() %>%
         mutate(
           n = row_number(),
-          # across(x, 
-          #        ~.x*-1),
-          # across(c(x,y),
-          #        ~if_else(n == 2, .x*1.125, .x)) # We need to adjust by the long text in axis number 8
+          across(x,
+                 ~.x*-1),
+          across(c(x,y),
+                 ~if_else(n == 2, .x*1.125, .x)) # We need to adjust by the long text in axis number 8
         ),
       aes(x = x, 
           y = y), 

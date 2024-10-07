@@ -30,7 +30,9 @@
 
 # load modules
 modules <- c(
-  "settings", "functions")
+  "settings", "functions", "ThailandDumbells", "radarChart") # copy of radar -- 
+                                                             # pushed some minor changes 
+                                                             # to WJPr but old version was still showing
 
 
 for (mod in modules){
@@ -42,8 +44,8 @@ for (mod in modules){
 
 # load data - replace with SP path
 master_data <- read.xlsx(
-  file.path(
-    "C:/Users/icoddington/Downloads/FINAL_2024_wjp_rule_of_law_index_HISTORICAL_DATA_FILE.xlsx"
+  file.path(path2DA,
+    "6. Country Reports/Thailand-Report-2024/data-viz/inputs/FINAL_2024_wjp_rule_of_law_index_HISTORICAL_DATA_FILE.xlsx"
   ),
   sheet = "Historical Data",
   check.names = FALSE
@@ -66,12 +68,12 @@ master_data <- read.xlsx(
   )
     
 
-# replace with SP path
+# load outline from SP
 outline <- read.xlsx(
-  file.path(
-    "C:/Users/icoddington/OneDrive - World Justice Project/Desktop/Github/Thailand-Report/inputs/thailand_outline.xlsx"  ),
+  file.path(path2DA,paste0("6. Country Reports/Thailand-Report-2024/data-viz/inputs/thailand_outline.xlsx")),
   sheet = "figure_map"
 )
+
 
 ## +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ##
