@@ -28,11 +28,11 @@ p_load(char = c(
 
   
   # Data Loading
-  "haven", "writexl", "openxlsx", "janitor",
+  "haven", "writexl", "openxlsx", "janitor","WJPr",
   
   
   # Utilities
-  "margins", "kableExtra", "glue",
+  "margins", "kableExtra", "glue", "sysfonts", "showtext", "ggtext",
   
   # Good 'ol Tidyverse
   "tidyverse"
@@ -112,5 +112,21 @@ WJP_theme <- function() {
         plot.margin  = unit(c(0, 0, 0, 0), "points")
   ) 
 }
+
+## +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+##
+## 5. Color Palettes                                                                                           ----
+##
+## +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+colors4plot <- c(
+  "Thailand" = "#1f77b4", 
+  "Malaysia" = "#ff7f0e",
+  "Indonesia" = "#2ca02c",  
+  "Vietnam" = "#d62728",   
+  "Philippines" = "#9467bd",
+  "Myanmar" = "#8c564b",   
+  "Cambodia" = "#e377c2"    
+)
 
 

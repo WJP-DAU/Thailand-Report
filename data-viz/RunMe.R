@@ -39,7 +39,6 @@ for (mod in modules){
   )
 }
 
-# data point
 
 # load data - replace with SP path
 master_data <- read.xlsx(
@@ -61,9 +60,9 @@ master_data <- read.xlsx(
          "Myanmar", 
          "Cambodia")
         
-     )  %>%
+     )  %>%  
   rename_with(
-    ~ ifelse(grepl("^[0-9]", .x), substr(.x, 1, 3), .x)
+    ~ ifelse(grepl("^[0-9]", .x), substr(.x, 1, 3), .x) # renaming with numerical indicator
   )
     
 
