@@ -48,7 +48,7 @@ p_load(char = c(
 if(Sys.info()["user"] == "icoddington"){
   path2DA <- "/Users/icoddington/OneDrive - World Justice Project/Data Analytics"
 } else if (Sys.info()["user"] == "spardo"){
-  
+  path2DA <- "/Users/santiagopardo/OneDrive - World Justice Project/Data Analytics/"
 }
 
 
