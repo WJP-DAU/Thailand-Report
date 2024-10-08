@@ -110,26 +110,26 @@ if (type == "radar"){
 wrangleData <- function(figid){
   # names of indicators
   metric_labels <- c(
-    "4.1" = "Equal treatment and\n absence of\n discrimination" ,
-    "4.3" = "Due process of the law\n and rights of \nthe accused",
-    "4.5" = "Freedom of belief and\n religion is \neffectively guaranteed",
-    "4.6" = "Freedom from arbitrary\n interference with privacy is \n effectively guaranteed",
-    "4.8" = "Fundamental labor\n rights are \neffectively guaranteed",
-    "6.5" = "The government does\nnot expropriate without \n lawful process and \nadequate compensation",
-    "1.5" = "Government powers are\n subject to non-governmental checks",
+    "4.1" = "Equal treatment and<br> absence of<br> discrimination" ,
+    "4.3" = "Due process of the law<br> and rights of <br>the accused",
+    "4.5" = "Freedom of belief and<br> religion is <br>effectively guaranteed",
+    "4.6" = "Freedom from arbitrary<br> interference with privacy is <br>effectively guaranteed",
+    "4.8" = "Fundamental labor<br> rights are <br>effectively guaranteed",
+    "6.5" = "The government does<br>not expropriate without <br>lawful process and <br>adequate compensation",
+    "1.5" = "Government powers are<br> subject to non-governmental checks",
     "3.2" =  "Right to information",
     "3.3" = "Civic participation",
     "3.4" = "Complaint mechanisms",
-    "4.4" = "Freedom of opinion\n and expression is\n effectively guaranteed",
-    "4.7" = "Freedom of assembly\n and association is\n effectively guaranteed",
-    "4.3" = "Due process of the\n law and rights of\n the accused",
-    "6.3" = "Administrative proceedings are\n conducted without \n unreasonable delay",
-    "8.7" = "Due process of the law\n and rights of\n the accused",
-    "7.1" = "People can access and\n afford civil justice",
-    "7.4" = "Civil justice is free of\n improper government influence",
-    "8.6" = "Criminal system is free\n of improper government\n influence",
+    "4.4" = "Freedom of opinion<br> and expression is<br>effectively guaranteed",
+    "4.7" = "Freedom of assembly<br> and association is<br>effectively guaranteed",
+    "4.3" = "Due process of the<br> law and rights of<br>the accused",
+    "6.3" = "Administrative proceedings are<br> conducted without <br>unreasonable delay",
+    "8.7" = "Due process of the law<br> and rights of<br>the accused",
+    "7.1" = "People can access and<br>afford civil justice",
+    "7.4" = "Civil justice is free of<br>improper government influence",
+    "8.6" = "Criminal system is free<br>of improper government<br>influence",
     "8.4" = "Criminal system is impartial",
-    "4.2" = "The right to \nlife and security\n of the person is \neffectively guaranteed"
+    "4.2" = "The right to <br>life and security<br>of the person is <br>effectively guaranteed"
   )
   
   # pull all variables for each chart
@@ -141,8 +141,6 @@ wrangleData <- function(figid){
     select(!c("id","section","type")) %>%
     select(where(~ !all(is.na(.)))) %>% 
     as.list()
-  
-
   
   variables <- as.character(unlist(variables))
   
@@ -183,12 +181,13 @@ wrangleData <- function(figid){
         names_prefix = "Value_"
       ) %>%
       # order var to use wjp_radar
-      mutate(order_var = row_number(),
+      mutate(
              label_var = as.character(recode(Metric, !!!metric_labels)),
              Metric = as.factor(Metric), 
+             figure = round(Value, 2),
              across(label_var,
                     ~paste0(
-                      "<span style=‘color:#2a2a9A;font-size:3.514598mm;font-weight:bold’>", Value, 
+                      "<span style=‘color:#2a2a9A;font-size:3.514598mm;font-weight:bold’>", figure, 
                         "</span>", "<br>",
                       "<span style=‘color:#524F4C;font-size:3.514598mm;font-weight:bold’>", 
                         label_var,
@@ -197,7 +196,12 @@ wrangleData <- function(figid){
              # unique label var
              label_var = ifelse(Year == 2024, label_var, NA),
              latestYear = "2024"
-      )
+      ) %>%
+      group_by(Year) %>%
+      mutate(
+        order_var = row_number()
+      ) %>%
+      ungroup()
   }
   
   
