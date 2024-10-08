@@ -194,7 +194,7 @@ wjp_radar <- function(
     ) +
     
     # Then, we add the axis labels
-    geom_text(
+    geom_richtext(
       data  = text_coords() %>%
         mutate(
           n = row_number(),

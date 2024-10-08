@@ -67,14 +67,17 @@ callVisualizer <- function(figid){
     chart <- genDumbell(data4chart)
   }
   
+  
   # three radars
-  if (type == "radar"){
+  
+if (type == "radar"){
+    latestYear <- "2024"
     chart <- wjp_radar(
       data = data_points[[figid]],
       axis_var = 'Metric',
       target_var = "Value",
       color_var = "Year",
-      maincat = "2015",
+      maincat = latestYear,
       label_var = 'label_var',
       colors = c("#EF709D", "#3772FF"),
       order_var = 'order_var'
@@ -134,13 +137,12 @@ wrangleData <- function(figid){
     pull(id)
 
   variables <- outline %>% 
-    filter(id %in% chart) %>% 
-    select(var_id1, var_id2, var_id3, var_id4, var_id5, var_id6) %>% as.list()
+    filter(id %in% chart) %>%
+    select(!c("id","section","type")) %>%
+    select(where(~ !all(is.na(.)))) %>% 
+    as.list()
   
-  
-  if (figid %in% c("F5", "F6")) {
-    variables <- c(variables, var_id7 = 8.4)
-  }
+
   
   variables <- as.character(unlist(variables))
   
@@ -183,7 +185,18 @@ wrangleData <- function(figid){
       # order var to use wjp_radar
       mutate(order_var = row_number(),
              label_var = as.character(recode(Metric, !!!metric_labels)),
-             Metric = as.factor(Metric) 
+             Metric = as.factor(Metric), 
+             across(label_var,
+                    ~paste0(
+                      "<span style=‘color:#2a2a9A;font-size:3.514598mm;font-weight:bold’>", Value, 
+                        "</span>", "<br>",
+                      "<span style=‘color:#524F4C;font-size:3.514598mm;font-weight:bold’>", 
+                        label_var,
+                      "</span>")
+             ),
+             # unique label var
+             label_var = ifelse(Year == 2024, label_var, NA),
+             latestYear = "2024"
       )
   }
   
