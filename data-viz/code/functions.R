@@ -72,6 +72,11 @@ callVisualizer <- function(figid){
   
 if (type == "radar"){
     latestYear <- "2024"
+    colors4plot <- c(
+      "2024" = "#2A2A94", 
+      "2015" = "#A90099" 
+    )
+    
     chart <- wjp_radar(
       data = data_points[[figid]],
       axis_var = 'Metric',
@@ -79,9 +84,9 @@ if (type == "radar"){
       color_var = "Year",
       maincat = latestYear,
       label_var = 'label_var',
-      colors = c("#2A2A94", "#A90099"),
+      colors = colors4plot,
       order_var = 'order_var'
-    )
+    );chart
   }
   
   # Save chart locally
@@ -164,7 +169,7 @@ wrangleData <- function(figid){
   }
   
   if (type == "radar") {
-    data2plot <- master_data %>%
+    data2join <- master_data %>%
       filter(Year %in% c("2015", "2024") & Country == 'Thailand') %>%
       select(Year, all_of(variables)) %>%
       pivot_longer(
@@ -187,7 +192,7 @@ wrangleData <- function(figid){
              figure = if_else(Year == "2024", paste0(round(Value,2)),  NA_character_),
              label_var = ifelse(Year == 2024, label_var, NA),
              latestYear = "2024"
-      ) %>%
+             )%>%
       arrange(Metric, Year) %>%
       group_by(Year) %>%
       mutate(
@@ -196,16 +201,17 @@ wrangleData <- function(figid){
       ungroup()
     
     
-    figure2.df <- data2plot %>% 
+    figure2.df <- data2join %>% 
       mutate(
         figure2 = if_else(Year == "2015", paste0(round(Value,2)),  NA_character_)
       ) %>%
       drop_na(figure2) %>%
       select(Metric, figure2)
     
-    data2plot <- data2plot %>%
+    data2plot <- data2join %>%
       left_join(figure2.df, by = c("Metric")) %>%
       mutate(
+        category = label_var,
         across(label_var,
                ~paste0(
                  "<span style='color:#2a2a9A;font-size:3.514598mm;font-weight:bold'>", figure, "</span>",
@@ -216,8 +222,10 @@ wrangleData <- function(figid){
                  label_var,
                  "</span>")
         ),
-        figure2 = if_else(Year == "2015",  NA_character_, figure2)
-        )
+        figure2 = if_else(Year == "2015",  NA_character_, figure2),
+        label_var = if_else(Year == "2015",  NA_character_, label_var)
+        ) %>%
+      arrange(-as.numeric(Year))
     
   }
   
