@@ -40,7 +40,7 @@ genDumbell <- function(data)
           axis.title.y = element_blank(),
           axis.ticks.y = element_blank(),
           axis.title.x = element_blank(),
-          axis.text.y = element_text(family = "Lato Medium",
+          axis.text.y = element_markdown(family = "Lato Medium",
                                      size = 3.5 * .pt,
                                      color = "Black", hjust = 0))
   

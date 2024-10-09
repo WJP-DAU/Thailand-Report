@@ -79,7 +79,7 @@ if (type == "radar"){
       color_var = "Year",
       maincat = latestYear,
       label_var = 'label_var',
-      colors = c("#EF709D", "#3772FF"),
+      colors = c("#2A2A94", "#A90099"),
       order_var = 'order_var'
     )
   }
@@ -88,8 +88,8 @@ if (type == "radar"){
   saveIT(
     chart = chart,
     figid = figid,
-    w = 200.7883,
-    h = 168.7007
+    w = 189.7883,
+    h = 189.7883
   )
   
   return(
@@ -115,7 +115,7 @@ wrangleData <- function(figid){
     "4.5" = "Freedom of belief and<br> religion is <br>effectively guaranteed",
     "4.6" = "Freedom from arbitrary<br> interference with privacy is <br>effectively guaranteed",
     "4.8" = "Fundamental labor<br> rights are <br>effectively guaranteed",
-    "6.5" = "The government does<br>not expropriate without <br>lawful process and <br>adequate compensation",
+    "6.5" = "The government does<br>not expropriate without <br>lawful process and <br>adequate <br>compensation",
     "1.5" = "Government powers are<br> subject to non-governmental checks",
     "3.2" =  "Right to information",
     "3.3" = "Civic participation",
@@ -126,9 +126,9 @@ wrangleData <- function(figid){
     "6.3" = "Administrative proceedings are<br> conducted without <br>unreasonable delay",
     "8.7" = "Due process of the law<br> and rights of<br>the accused",
     "7.1" = "People can access and<br>afford civil justice",
-    "7.4" = "Civil justice is free of<br>improper government influence",
+    "7.4" = "Civil justice is free of<br>improper government <br>influence",
     "8.6" = "Criminal system is free<br>of improper government<br>influence",
-    "8.4" = "Criminal system is impartial",
+    "8.4" = "Criminal system is <br>impartial",
     "4.2" = "The right to <br>life and security<br>of the person is <br>effectively guaranteed"
   )
   
@@ -184,24 +184,41 @@ wrangleData <- function(figid){
       mutate(
              label_var = as.character(recode(Metric, !!!metric_labels)),
              Metric = as.factor(Metric), 
-             figure = round(Value, 2),
-             across(label_var,
-                    ~paste0(
-                      "<span style=‘color:#2a2a9A;font-size:3.514598mm;font-weight:bold’>", figure, 
-                        "</span>", "<br>",
-                      "<span style=‘color:#524F4C;font-size:3.514598mm;font-weight:bold’>", 
-                        label_var,
-                      "</span>")
-             ),
-             # unique label var
+             figure = if_else(Year == "2024", paste0(round(Value,2)),  NA_character_),
              label_var = ifelse(Year == 2024, label_var, NA),
              latestYear = "2024"
       ) %>%
+      arrange(Metric, Year) %>%
       group_by(Year) %>%
       mutate(
         order_var = row_number()
       ) %>%
       ungroup()
+    
+    
+    figure2.df <- data2plot %>% 
+      mutate(
+        figure2 = if_else(Year == "2015", paste0(round(Value,2)),  NA_character_)
+      ) %>%
+      drop_na(figure2) %>%
+      select(Metric, figure2)
+    
+    data2plot <- data2plot %>%
+      left_join(figure2.df, by = c("Metric")) %>%
+      mutate(
+        across(label_var,
+               ~paste0(
+                 "<span style='color:#2a2a9A;font-size:3.514598mm;font-weight:bold'>", figure, "</span>",
+                 "<span>", " | " ,"</span>", 
+                 "<span style='color:#a90099;font-size:3.514598mm;font-weight:bold'>", figure2, "</span>",
+                 "<br>",
+                 "<span style=‘color:#524F4C;font-size:3.514598mm;font-weight:bold’>", 
+                 label_var,
+                 "</span>")
+        ),
+        figure2 = if_else(Year == "2015",  NA_character_, figure2)
+        )
+    
   }
   
   

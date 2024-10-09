@@ -47,7 +47,7 @@ p_load(char = c(
 
 if(Sys.info()["user"] == "icoddington"){
   path2DA <- "/Users/icoddington/OneDrive - World Justice Project/Data Analytics"
-} else if (Sys.info()["user"] == "spardo"){
+} else if (Sys.info()["user"] == "santiagopardo"){
   path2DA <- "/Users/santiagopardo/OneDrive - World Justice Project/Data Analytics/"
 }
 
@@ -90,21 +90,21 @@ WJP_theme <- function() {
                                           colour   = "#5e5c5a",
                                           linetype = "dashed"),
         panel.grid.minor   = element_blank(),
-        axis.title.y       = element_text(family   = "Lato Full",
+        axis.title.y       = element_markdown(family   = "Lato Full",
                                           face     = "plain",
                                           size     = 3.514598*.pt,
                                           color    = "#524F4C",
                                           margin   = margin(0, 10, 0, 0)),
-        axis.title.x       = element_text(family   = "Lato Full",
+        axis.title.x       = element_markdown(family   = "Lato Full",
                                           face     = "plain",
                                           size     = 3.514598*.pt,
                                           color    = "#524F4C",
                                           margin   = margin(10, 0, 0, 0)),
-        axis.text.y        = element_text(family   = "Lato Full",
+        axis.text.y        = element_markdown(family   = "Lato Full",
                                           face     = "plain",
                                           size     = 3.514598*.pt,
                                           color    = "#524F4C"),
-        axis.text.x = element_text(family = "Lato Full",
+        axis.text.x = element_markdown(family = "Lato Full",
                                    face   = "plain",
                                    size   = 3.514598*.pt,
                                    color  = "#524F4C"),
@@ -120,13 +120,13 @@ WJP_theme <- function() {
 ## +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 colors4plot <- c(
-  "Thailand" = "#1f77b4", 
-  "Malaysia" = "#ff7f0e",
-  "Indonesia" = "#2ca02c",  
-  "Vietnam" = "#d62728",   
-  "Philippines" = "#9467bd",
-  "Myanmar" = "#8c564b",   
-  "Cambodia" = "#e377c2"    
+  "Thailand" = "#2A2A94", 
+  "Malaysia" = "#A90099",
+  "Indonesia" = "#3273FF",  
+  "Vietnam" = "#EFA700",   
+  "Philippines" = "#00B67F",
+  "Myanmar" = "#FA4D57",   
+  "Cambodia" = "#A68BF2"    
 )
 
 
