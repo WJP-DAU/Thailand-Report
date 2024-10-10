@@ -200,7 +200,7 @@ wrangleData <- function(figid){
       group_by(Year) %>%
       arrange(-Value) %>%
       mutate(
-        order_var = row_number()
+        order_var = if_else(Year == "2024", row_number(), NA_real_)
       ) %>%
       ungroup()
     
@@ -210,10 +210,15 @@ wrangleData <- function(figid){
         figure2 = if_else(Year == "2015", paste0(round(Value,2)),  NA_character_)
       ) %>%
       drop_na(figure2) %>%
-      select(Metric, figure2)
+      select(Metric, figure2) 
+    
+    order_value <- data2join %>%
+      drop_na(order_var) %>%
+      select(Metric, order_var)
     
     data2plot <- data2join %>%
       left_join(figure2.df, by = c("Metric")) %>%
+      left_join(order_value, by = c("Metric")) %>%
       mutate(
         category = label_var,
         across(label_var,
@@ -227,9 +232,11 @@ wrangleData <- function(figid){
                  "</span>")
         ),
         figure2 = if_else(Year == "2015",  NA_character_, figure2),
-        label_var = if_else(Year == "2015",  NA_character_, label_var)
+        label_var = if_else(Year == "2015",  NA_character_, label_var),
         ) %>%
-      arrange(-as.numeric(Year))
+      arrange(-as.numeric(Year)) %>%
+      select(!order_var.x) %>%
+      rename(order_var = order_var.y)
     
   }
   
