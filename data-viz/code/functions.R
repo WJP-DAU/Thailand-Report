@@ -93,7 +93,7 @@ if (type == "radar"){
   saveIT(
     chart = chart,
     figid = figid,
-    w = 189.7883,
+    w = 230,
     h = 189.7883
   )
   
@@ -195,8 +195,9 @@ wrangleData <- function(figid){
              label_var = ifelse(Year == 2024, label_var, NA),
              latestYear = "2024"
              )%>%
-      arrange(Metric, Year) %>%
+      arrange(Metric, Year, Value) %>%
       group_by(Year) %>%
+      arrange(-Value) %>%
       mutate(
         order_var = row_number()
       ) %>%
