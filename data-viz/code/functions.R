@@ -137,6 +137,8 @@ wrangleData <- function(figid){
     "4.2" = "The right to <br>life and security<br>of the person is <br>effectively guaranteed"
   )
   
+  dumbell_wrapped_metric_labels <- sapply(metric_labels, function(x) str_wrap(x, width = 30))
+  
   # pull all variables for each chart
   chart <- outline %>% filter(id %in% figid) %>%
     pull(id)
@@ -163,7 +165,7 @@ wrangleData <- function(figid){
     
     data2plot <- thailand_report %>%
       mutate(
-        label_var = recode(Metric, !!!metric_labels)
+        label_var = recode(Metric, !!!dumbell_wrapped_metric_labels)
         
       )
   }
