@@ -137,7 +137,9 @@ wjp_radar <- function(
     mutate(
       coords = rescaled_coords(target_var + central_distance)
     ) %>%
-    unnest(cols   = c(coords)) 
+    unnest(cols   = c(coords)) %>%
+    mutate(across(x, 
+                  ~.x*-1))
   
   # Generating ggplot
   radar <-
@@ -145,7 +147,7 @@ wjp_radar <- function(
     # We set up the ggplot
     ggplot(
       data = map_df(seq(0, 1, 0.20) + central_distance, circle_coords),
-      aes(x = x, 
+      aes(x = x,
           y = y)
     ) +
     
