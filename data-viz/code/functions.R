@@ -134,7 +134,8 @@ wrangleData <- function(figid){
     "7.4" = "Civil justice is free of<br>improper government <br>influence",
     "8.6" = "Criminal system is free<br>of improper government<br>influence",
     "8.4" = "Criminal system is <br>impartial",
-    "4.2" = "The right to <br>life and security<br>of the person is <br>effectively guaranteed"
+    "4.2" = "The right to <br>life and security<br>of the person is <br>effectively guaranteed",
+    "7.2" = "Discrimination <br> in Civil Justice"
   )
   
   dumbell_wrapped_metric_labels <- sapply(metric_labels, function(x) str_wrap(x, width = 30))
