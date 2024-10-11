@@ -115,27 +115,27 @@ if (type == "radar"){
 wrangleData <- function(figid){
   # names of indicators
   metric_labels <- c(
-    "4.1" = "Equal treatment and<br> absence of<br> discrimination" ,
-    "4.3" = "Due process of the law<br> and rights of <br>the accused",
-    "4.5" = "Freedom of belief and<br> religion is <br>effectively guaranteed",
-    "4.6" = "Freedom from arbitrary<br> interference with privacy is <br>effectively guaranteed",
-    "4.8" = "Fundamental labor<br> rights are <br>effectively guaranteed",
-    "6.5" = "The government does<br>not expropriate without <br>lawful process and <br>adequate <br>compensation",
-    "1.5" = "Government powers are<br> subject to non-governmental checks",
-    "3.2" =  "Right to information",
-    "3.3" = "Civic participation",
-    "3.4" = "Complaint mechanisms",
-    "4.4" = "Freedom of opinion<br> and expression is<br>effectively guaranteed",
-    "4.7" = "Freedom of assembly<br> and association is<br>effectively guaranteed",
-    "4.3" = "Due process of the<br> law and rights of<br>the accused",
-    "6.3" = "Administrative proceedings are<br> conducted without <br>unreasonable delay",
-    "8.7" = "Due process of the law<br> and rights of<br>the accused",
-    "7.1" = "People can access and<br>afford civil justice",
-    "7.4" = "Civil justice is free of<br>improper government <br>influence",
-    "8.6" = "Criminal system is free<br>of improper government<br>influence",
-    "8.4" = "Criminal system is <br>impartial",
-    "4.2" = "The right to <br>life and security<br>of the person is <br>effectively guaranteed",
-    "7.2" = "Discrimination <br> in Civil Justice"
+    "1.5" = "Non-Governmental Checks<br> of Government Power",
+    "3.3" = "Civic Participation",
+    "3.4" = "Access to Complaint<br> Mechanisms",
+    "3.2" = "Right to <br> Information",
+    "4.3" = "Due Process of<br>the Law and Rights<br> of the Accused",
+    "7.4" = "Improper<br> Government Influence<br> in Civil Justice",
+    "8.6" = "Improper<br> Government Influence<br> in Criminal Justice",
+    "7.1" = "Access to <br> and Afforability<br> of Civil Justice",
+    "8.4" = "Impartiality in <br> Criminal Justice",
+    "4.1" = "Equality<br> and Discrimination",
+    "7.2" = "Discrimination<br> in Civil Justice",
+    "4.8" = "Labor Rights",
+    "6.3" = "Due Process is <br> Respected in<br>Administrative Proceedings",
+    "4.2" = "The Right to <br>Life and Security of<br>the Person is Effectively<br> Guaranteed",
+    "6.5" = "Protection from<br> Expropriation without<br> Due Process",
+    "4.7" = "Freedom of <br> Assembly and Association",
+    "4.4" = "Freedom of <br> Expression and <br> Opinion",
+    "4.5" = "Freedom of <br> Belief and Religion",
+    "4.6" = "Freedom from <br> Interference with <br> Privacy",
+    "6.5" = "Freedom from <br> Expropration without <br> Due Process"
+    
   )
   
   dumbell_wrapped_metric_labels <- sapply(metric_labels, function(x) str_wrap(x, width = 30))
