@@ -1,8 +1,13 @@
 genDumbell <- function(data) 
   {
-  data <- data %>% 
-    arrange(ifelse(Country == "Thailand", values, NA)) %>%
+  data <-  data %>%
+    group_by(label_var) %>%
+    mutate(order_value = ifelse(Country == "Thailand", values, NA)) %>% # Tomar el valor de Tailandia si está presente
+    ungroup() %>%
+    arrange(order_value) %>% # Ordenar de forma descendente según el valor de Tailandia
     mutate(label_var = factor(label_var, levels = unique(label_var)))
+  
+  
   # Create the lollipop plot
   plot <- ggplot(data, aes(x = values, 
                                 y = reorder(label_var, -values),
@@ -22,6 +27,13 @@ genDumbell <- function(data)
               vjust = -2,   # Adjust vertical positioning of text
               size = 4,    # Text size
               family = "Lato Bold") +
+    
+    # Add mean_value points (NEW CODE)
+    geom_point(data = data, aes(x = mean_value, y = reorder(label_var, -values)), 
+               shape = 15,  # Square shape
+               color = "grey25",  # Dark grey color
+               size = 4) +  # Size of the square
+    # End of new code
     
     # Customize point shapes: 18 = diamond, 16 = circle
     scale_shape_manual(values = c(18, 16)) +  

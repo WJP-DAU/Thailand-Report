@@ -94,7 +94,7 @@ if (type == "radar"){
     chart = chart,
     figid = figid,
     w = 230,
-    h = 189.7883
+    h = 210
   )
   
   return(
@@ -127,14 +127,14 @@ wrangleData <- function(figid){
     "4.1" = "Equality<br> and Discrimination",
     "7.2" = "Discrimination<br> in Civil Justice",
     "4.8" = "Labor Rights",
-    "6.3" = "Due Process is <br> Respected in<br>Administrative Proceedings",
+    "6.4" = "Due Process is <br> Respected in<br>Administrative Proceedings",
     "4.2" = "The Right to <br>Life and Security of<br>the Person is Effectively<br> Guaranteed",
-    "6.5" = "Protection from<br> Expropriation without<br> Due Process",
+    "6.3" = "Administrative <br>proceedings are conducted <br>without unreasonable delay",
     "4.7" = "Freedom of <br> Assembly and Association",
     "4.4" = "Freedom of <br> Expression and <br> Opinion",
     "4.5" = "Freedom of <br> Belief and Religion",
     "4.6" = "Freedom from <br> Interference with <br> Privacy",
-    "6.5" = "Freedom from <br> Expropration without <br> Due Process"
+    "6.5" = "No expropriation <br>without adequate <br>compensation"
     
   )
   
@@ -167,7 +167,10 @@ wrangleData <- function(figid){
     data2plot <- thailand_report %>%
       mutate(
         label_var = recode(Metric, !!!dumbell_wrapped_metric_labels)
-        
+      ) %>%
+      group_by(Metric) %>%
+      mutate(
+        mean_value = mean(values)
       )
   }
   
