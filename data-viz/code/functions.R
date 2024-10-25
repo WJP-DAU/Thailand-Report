@@ -68,8 +68,7 @@ callVisualizer <- function(figid){
   }
   
   
-  # three radars
-  
+
 if (type == "radar"){
     latestYear <- "2024"
     colors4plot <- c(
@@ -87,6 +86,25 @@ if (type == "radar"){
       colors = colors4plot,
       order_var = 'order_var'
     );chart
+}
+  
+  if (type == "slope"){
+    colors4plot <- c(
+      "4.8" = "#2A2A94", 
+      "6.5" = "#A90099" 
+    )
+    chart <- thailand_slope(
+      data     = data4chart,
+      target   = "Value",
+      grouping = "Year",
+      ngroups  = "Metric",
+      colors   = "Metric",
+      cvec     = colors4plot,
+      labels   = "label",
+      repel    = FALSE,
+      ptheme   = WJP_theme()
+    )
+    
   }
   
   # Save chart locally
@@ -112,8 +130,8 @@ if (type == "radar"){
 ##
 ## +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-wrangleData <- function(figid){
-  # names of indicators
+wrangleData <- function(figid) {
+  # Names of indicators
   metric_labels <- c(
     "1.5" = "Non-Governmental Checks<br> of Government Power",
     "3.3" = "Civic Participation",
@@ -122,7 +140,7 @@ wrangleData <- function(figid){
     "4.3" = "Due Process of<br>the Law and Rights<br> of the Accused",
     "7.4" = "Improper<br> Government Influence<br> in Civil Justice",
     "8.6" = "Improper<br> Government Influence<br> in Criminal Justice",
-    "7.1" = "Access to <br> and Afforability<br> of Civil Justice",
+    "7.1" = "Access to <br> and Affordability<br> of Civil Justice",
     "8.4" = "Impartiality in <br> Criminal Justice",
     "4.1" = "Equality<br> and Discrimination",
     "7.2" = "Discrimination<br> in Civil Justice",
@@ -135,115 +153,105 @@ wrangleData <- function(figid){
     "4.5" = "Freedom of <br> Belief and Religion",
     "4.6" = "Freedom from <br> Interference with <br> Privacy",
     "6.5" = "No expropriation <br>without adequate <br>compensation"
-    
   )
   
+  # Format wrapped labels for dumbbells
   dumbell_wrapped_metric_labels <- sapply(metric_labels, function(x) str_wrap(x, width = 30))
   
-  # pull all variables for each chart
+  # Pull all variables for the chart
   chart <- outline %>% filter(id %in% figid) %>%
     pull(id)
-
-  variables <- outline %>% 
+  
+  variables <- outline %>%
     filter(id %in% chart) %>%
-    select(!c("id","section","type")) %>%
-    select(where(~ !all(is.na(.)))) %>% 
+    select(!c("id", "section", "type")) %>%
+    select(where(~ !all(is.na(.)))) %>%
     as.list()
   
   variables <- as.character(unlist(variables))
   
+  # Determine chart type
   type <- outline %>% filter(id %in% figid) %>%
     pull(first(type))
   
-  # for dumbells, all countries and 2024 vals only
+  # For dumbbell plots (2024 values only)
   if (type == "dumbell") {
     thailand_report <- master_data %>%
       filter(Year == 2024) %>%
       select(Country, Year, all_of(variables)) %>%
-      pivot_longer(cols = !c(Country, Year), 
-                   names_to = "Metric", values_to = "values")
-    
+      pivot_longer(cols = !c(Country, Year), names_to = "Metric", values_to = "values")
     
     data2plot <- thailand_report %>%
-      mutate(
-        label_var = recode(Metric, !!!dumbell_wrapped_metric_labels)
-      ) %>%
+      mutate(label_var = recode(Metric, !!!dumbell_wrapped_metric_labels)) %>%
       group_by(Metric) %>%
-      mutate(
-        mean_value = mean(values)
-      )
+      mutate(mean_value = mean(as.numeric(values), na.rm = TRUE))
   }
   
+  # For radar plots (2015 and 2024 values)
   if (type == "radar") {
     data2join <- master_data %>%
-      filter(Year %in% c("2015", "2024") & Country == 'Thailand') %>%
+      filter(Year %in% c(2015, 2024) & Country == 'Thailand') %>%
       select(Year, all_of(variables)) %>%
-      pivot_longer(
-        cols = all_of(variables), 
-        names_to = "Metric", 
-        values_to = "Value"
-      ) %>%
+      pivot_longer(cols = all_of(variables), names_to = "Metric", values_to = "Value") %>%
+      mutate(Value = as.numeric(Value)) %>%  # Convert Value to numeric
       pivot_wider(names_from = Year, values_from = Value) %>%
       rename(Value_2015 = `2015`, Value_2024 = `2024`) %>%
-      pivot_longer(
-        cols = starts_with("Value"), 
-        names_to = "Year", 
-        values_to = "Value",
-        names_prefix = "Value_"
-      ) %>%
-      # order var to use wjp_radar
+      pivot_longer(cols = starts_with("Value"), names_to = "Year", values_to = "Value", names_prefix = "Value_") %>%
       mutate(
-             label_var = as.character(recode(Metric, !!!metric_labels)),
-             Metric = as.factor(Metric), 
-             figure = if_else(Year == "2024", paste0(round(Value,2)),  NA_character_),
-             label_var = ifelse(Year == 2024, label_var, NA),
-             latestYear = "2024"
-             )%>%
+        label_var = recode(Metric, !!!metric_labels),
+        Metric = as.factor(Metric),
+        figure = if_else(Year == "2024", paste0(round(Value, 2)), NA_character_),
+        latestYear = "2024"
+      ) %>%
       arrange(Metric, Year, Value) %>%
       group_by(Year) %>%
-      arrange(-Value) %>%
-      mutate(
-        order_var = if_else(Year == "2024", row_number(), NA_real_)
-      ) %>%
+      arrange(desc(Value)) %>%
+      mutate(order_var = if_else(Year == "2024", row_number(), NA_real_)) %>%
       ungroup()
     
-    
-    figure2.df <- data2join %>% 
-      mutate(
-        figure2 = if_else(Year == "2015", paste0(round(Value,2)),  NA_character_)
-      ) %>%
+    figure2.df <- data2join %>%
+      mutate(figure2 = if_else(Year == "2015", paste0(round(Value, 2)), NA_character_)) %>%
       drop_na(figure2) %>%
-      select(Metric, figure2) 
+      select(Metric, figure2)
     
     order_value <- data2join %>%
       drop_na(order_var) %>%
       select(Metric, order_var)
     
     data2plot <- data2join %>%
-      left_join(figure2.df, by = c("Metric")) %>%
-      left_join(order_value, by = c("Metric")) %>%
+      left_join(figure2.df, by = "Metric") %>%
+      left_join(order_value, by = "Metric") %>%
       mutate(
         category = label_var,
-        across(label_var,
-               ~paste0(
-                 "<span style='color:#2a2a9A;font-size:3.514598mm;font-weight:bold'>", figure, "</span>",
-                 "<span>", " | " ,"</span>", 
-                 "<span style='color:#a90099;font-size:3.514598mm;font-weight:bold'>", figure2, "</span>",
-                 "<br>",
-                 "<span style=‘color:#524F4C;font-size:3.514598mm;font-weight:bold’>", 
-                 label_var,
-                 "</span>")
-        ),
-        figure2 = if_else(Year == "2015",  NA_character_, figure2),
-        label_var = if_else(Year == "2015",  NA_character_, label_var),
-        ) %>%
-      arrange(-as.numeric(Year)) %>%
-      select(!order_var.x) %>%
+        across(label_var, ~paste0(
+          "<span style='color:#2a2a9A;font-size:3.514598mm;font-weight:bold'>", figure, "</span>",
+          "<span> | </span>",
+          "<span style='color:#a90099;font-size:3.514598mm;font-weight:bold'>", figure2, "</span><br>",
+          "<span style='color:#524F4C;font-size:3.514598mm;font-weight:bold'>", label_var, "</span>"
+        )),
+        figure2 = if_else(Year == "2015", NA_character_, figure2),
+        label_var = if_else(Year == "2015", NA_character_, label_var)
+      ) %>%
+      arrange(desc(as.numeric(Year))) %>%
+      select(-order_var.x) %>%
       rename(order_var = order_var.y)
+  }
+  
+  # For slope plots (2015 and 2024 values)
+  if (type == "slope") {
+    data2plot <- master_data %>%
+      filter((Year %in% c(2015, 2024)) & (Country == "Thailand") ) %>%
+      select(Year, all_of(variables)) %>%
+      pivot_longer(cols = all_of(variables), names_to = "Metric", values_to = "Value") %>%
+      mutate(
+        label = paste0(round(Value, 2))
+      ) %>%
+      arrange(Year)
     
   }
   
-  
-    return (data2plot)
+  return(data2plot)
 }
+
+
 

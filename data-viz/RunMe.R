@@ -30,7 +30,7 @@
 
 # load modules
 modules <- c(
-  "settings", "functions", "ThailandDumbells", "radarChart") # copy of radar -- 
+  "settings", "functions", "ThailandDumbells", "thailandSlope","radarChart") # copy of radar -- 
                                                              # pushed some minor changes 
                                                              # to WJPr but old version was still showing
 
