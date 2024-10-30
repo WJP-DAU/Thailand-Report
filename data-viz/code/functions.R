@@ -107,12 +107,30 @@ if (type == "radar"){
     
   }
   
+  if (type == "bars"){
+    chart <- thailand_bars(
+      data          = data4chart,
+      target        = "Value",
+      grouping      = "Year",
+      labels        = "label",        # Optional, shows text on bars if provided
+      colors        = "Year"
+    )
+    
+  }
+  
+  if (figid == "F4"){
+    height = 190
+  }
+  else{
+    height = 210
+  }
+  
   # Save chart locally
   saveIT(
     chart = chart,
     figid = figid,
     w = 230,
-    h = 210
+    h = height
   )
   
   return(
@@ -238,7 +256,7 @@ wrangleData <- function(figid) {
   }
   
   # For slope plots (2015 and 2024 values)
-  if (type == "slope") {
+  if (type %in% c("slope", "bars")) {
     data2plot <- master_data %>%
       filter((Year %in% c(2015, 2024)) & (Country == "Thailand") ) %>%
       select(Year, all_of(variables)) %>%
