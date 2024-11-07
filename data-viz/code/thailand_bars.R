@@ -4,7 +4,7 @@ thailand_bars <- function(
     grouping,           # Column name for x-axis groups
     labels   = NULL,    # Optional column for text labels
     colors   = NULL,    # Column name to determine colors by group
-    color_palette = c("2015" = "#A90099", "2024" = "#2A2A94") # Colors to map for fill
+    color_palette = c("2020" = "#A90099", "2024" = "#2A2A94") # Colors to map for fill
 ) {
   
   # Rename columns in the data frame for simplicity

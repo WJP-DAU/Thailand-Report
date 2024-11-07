@@ -73,7 +73,7 @@ if (type == "radar"){
     latestYear <- "2024"
     colors4plot <- c(
       "2024" = "#2A2A94", 
-      "2015" = "#A90099" 
+      "2020" = "#A90099" 
     )
     
     chart <- wjp_radar(
@@ -208,12 +208,13 @@ wrangleData <- function(figid) {
   # For radar plots (2015 and 2024 values)
   if (type == "radar") {
     data2join <- master_data %>%
-      filter(Year %in% c(2015, 2024) & Country == 'Thailand') %>%
+      filter(Year %in% c(2020
+                         , 2024) & Country == 'Thailand') %>%
       select(Year, all_of(variables)) %>%
       pivot_longer(cols = all_of(variables), names_to = "Metric", values_to = "Value") %>%
       mutate(Value = as.numeric(Value)) %>%  # Convert Value to numeric
       pivot_wider(names_from = Year, values_from = Value) %>%
-      rename(Value_2015 = `2015`, Value_2024 = `2024`) %>%
+      rename(Value_2020 = `2020`, Value_2024 = `2024`) %>%
       pivot_longer(cols = starts_with("Value"), names_to = "Year", values_to = "Value", names_prefix = "Value_") %>%
       mutate(
         label_var = recode(Metric, !!!metric_labels),
@@ -228,7 +229,7 @@ wrangleData <- function(figid) {
       ungroup()
     
     figure2.df <- data2join %>%
-      mutate(figure2 = if_else(Year == "2015", paste0(round(Value, 2)), NA_character_)) %>%
+      mutate(figure2 = if_else(Year == "2020", paste0(round(Value, 2)), NA_character_)) %>%
       drop_na(figure2) %>%
       select(Metric, figure2)
     
@@ -247,8 +248,8 @@ wrangleData <- function(figid) {
           "<span style='color:#a90099;font-size:3.514598mm;font-weight:bold'>", figure2, "</span><br>",
           "<span style='color:#524F4C;font-size:3.514598mm;font-weight:bold'>", label_var, "</span>"
         )),
-        figure2 = if_else(Year == "2015", NA_character_, figure2),
-        label_var = if_else(Year == "2015", NA_character_, label_var)
+        figure2 = if_else(Year == "2020", NA_character_, figure2),
+        label_var = if_else(Year == "2020", NA_character_, label_var)
       ) %>%
       arrange(desc(as.numeric(Year))) %>%
       select(-order_var.x) %>%
@@ -258,7 +259,7 @@ wrangleData <- function(figid) {
   # For slope plots (2015 and 2024 values)
   if (type %in% c("slope", "bars")) {
     data2plot <- master_data %>%
-      filter((Year %in% c(2015, 2024)) & (Country == "Thailand") ) %>%
+      filter((Year %in% c(2020, 2024)) & (Country == "Thailand") ) %>%
       select(Year, all_of(variables)) %>%
       pivot_longer(cols = all_of(variables), names_to = "Metric", values_to = "Value") %>%
       mutate(
