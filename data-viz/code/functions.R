@@ -120,8 +120,11 @@ if (type == "radar"){
   
   if (figid == "F4"){
     height = 190
-  }
-  else{
+  } else if (figid %in% c("F6_A", "F6_B", "F3", "F5")){
+    
+    height = 90
+    
+  } else{
     height = 210
   }
   
@@ -165,12 +168,12 @@ wrangleData <- function(figid) {
     "4.8" = "Labor Rights",
     "6.4" = "Due Process is <br> Respected in<br>Administrative Proceedings",
     "4.2" = "The Right to <br>Life and Security of<br>the Person is Effectively<br> Guaranteed",
-    "6.3" = "Administrative <br>proceedings are conducted <br>without unreasonable delay",
+    "6.3" = "Administrative <br>Proceedings are Conducted <br>without Unreasonable Delay",
     "4.7" = "Freedom of <br> Assembly and Association",
     "4.4" = "Freedom of <br> Expression and <br> Opinion",
     "4.5" = "Freedom of <br> Belief and Religion",
     "4.6" = "Freedom from <br> Interference with <br> Privacy",
-    "6.5" = "No expropriation <br>without adequate <br>compensation"
+    "6.5" = "Protection from <br>Expropriation without <br>Due Process"
   )
   
   # Format wrapped labels for dumbbells

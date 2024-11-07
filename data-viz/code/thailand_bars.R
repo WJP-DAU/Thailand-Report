@@ -12,7 +12,9 @@ thailand_bars <- function(
     rename(
       target_var   = all_of(target),
       grouping_var = all_of(grouping)
-    )
+    ) %>%
+    mutate(grouping_var = factor(grouping_var, levels = c("2024", "2015")))
+    
   
   # Optional label column renaming
   if (!is.null(labels) && labels %in% names(data)) {
@@ -31,12 +33,23 @@ thailand_bars <- function(
   # Create the bar plot
   plt <- ggplot(data, aes(x = grouping_var, y = target_var, fill = grouping_var, label = labels_var)) +
     geom_bar(stat = "identity", width = 0.8, show.legend = FALSE) +
-    geom_text(aes(y = target_var), vjust = -0.5, color = "black", fontface = "bold") +
     scale_fill_manual(values = color_palette) +
+    # Add labels with conditional color based on grouping_var
+    geom_text(aes(y = target_var, color = grouping_var), vjust = -0.5, size = 4, family = "Lato Bold", show.legend = F) +
+    scale_color_manual(values = color_palette) + # Color for text labels
+    # Adjust Y-axis limits
+    scale_y_continuous(limits = c(0, 1)) +
+    
+    # Adjust X-axis labels to have specific colors
+    scale_x_discrete(labels = c("2024" = "2024", "2015" = "2015")) +
     labs(y = NULL, x = NULL) +
-    theme_minimal() +
-    theme(panel.grid.major.x = element_blank(),
-          panel.grid.major.y = element_line(color = "#D0D1D3"))
+    WJP_theme() +
+    theme(
+      panel.grid.major.y = element_blank(),
+      panel.grid.major.x = element_line(color = "#D0D1D3"),
+      axis.title.y       = element_blank(),
+      axis.title.x       = element_blank()
+      )
   
   return(plt)
 }
