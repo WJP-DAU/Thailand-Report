@@ -59,7 +59,8 @@ master_data <- read.xlsx(
          "Vietnam", 
          "Philippines", 
          "Myanmar", 
-         "Cambodia")
+         "Cambodia",
+         "Singapore")
         
      )  %>%  
   rename_with(

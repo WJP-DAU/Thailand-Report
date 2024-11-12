@@ -126,7 +126,8 @@ colors4plot <- c(
   "Vietnam" = "#EFA700",   
   "Philippines" = "#00B67F",
   "Myanmar" = "#FA4D57",   
-  "Cambodia" = "#A68BF2"    
+  "Cambodia" = "#A68BF2",
+  "Singapore" = "#404040"
 )
 
 

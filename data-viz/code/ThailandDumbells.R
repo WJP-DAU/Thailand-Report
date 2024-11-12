@@ -47,15 +47,16 @@ genDumbell <- function(data) {
     
     # Display Thailand values as text labels
     geom_text(data = subset(data, Country == "Thailand"),
-              aes(x = values, y = reorder(label_var, -values), label = round(values, 2)),
+              aes(x = values, y = reorder(label_var, -values), 
+                  label = sprintf("%.2f", values)),  # Use sprintf() for exactly two decimals
               hjust = 0.45, vjust = -2, size = 4, 
               family = "Lato Bold", color = "#524F4C") +
     
     # Add mean value as a text ribbon on the right
     geom_text(data = mean_values, 
               aes(x = 1.15, y = reorder(label_var, -mean_value), 
-                  label = round(mean_value, 2)),
-              hjust = 0, vjust = 0.5, size = 3.5, 
+                  label = sprintf("%.2f", mean_value)),  # Use sprintf() for exactly two decimals
+              hjust = 0, vjust = 0.5, size = 4, 
               family = "Lato bold", color = "black") +
     
     # Manually add vertical lines only up to the "1" position

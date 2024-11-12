@@ -28,11 +28,13 @@ data2table <- master_data %>%
   filter(Year %in% c("2020", "2023", "2024")) %>%
   pivot_longer(cols = !c(Country, Year), names_to = "indicator", values_to = "value2plot") %>%
   group_by(Country, Year) %>%
-  summarise(value2table = mean(value2plot, na.rm = T)) %>%
+  summarise(value2table = mean(value2plot, na.rm = TRUE)) %>%
   ungroup() %>%
   pivot_wider(id_cols = c(Country), names_from = Year, values_from = value2table) %>%
   mutate(
     regional_ranking = rank(-`2024`),
+    `Score in 2024` = sprintf("%.2f", `2024`),  # Use sprintf() for two decimals
+    `Score in 2020` = sprintf("%.2f", `2020`),  # Use sprintf() for two decimals
     `% change in 5 years` = ifelse(
       (`2024` - `2020`) / `2020` > 0,
       paste0("+", round((`2024` - `2020`) / `2020`, 2) * 100, "%"),
@@ -45,9 +47,15 @@ data2table <- master_data %>%
     ),
     ranking_2020 = rank(-`2020`)
   ) %>%
-  select(regional_ranking, Country, `2024`, `% change last year`,
-         `2020`, `% change in 5 years`, ranking_2020) %>%
-  arrange(regional_ranking)
+  select(`Regional ranking` = regional_ranking, 
+         Country, 
+         `Score in 2024`, 
+         `% change last year`,
+         `Score in 2020`, 
+         `% change in 5 years`, 
+         `Regional ranking in 2020` = ranking_2020) %>%
+  arrange(`Regional ranking`)
+
 
 
 writexl::write_xlsx(data2table, path = "table_south_asia.xlsx")

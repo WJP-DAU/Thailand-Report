@@ -154,26 +154,26 @@ if (type == "radar"){
 wrangleData <- function(figid) {
   # Names of indicators
   metric_labels <- c(
-    "1.5" = "Non-Governmental Checks<br> of Government Power",
-    "3.3" = "Civic Participation",
-    "3.4" = "Access to Complaint<br> Mechanisms",
-    "3.2" = "Right to <br> Information",
-    "4.3" = "Due Process of<br>the Law and Rights<br> of the Accused",
-    "7.4" = "Improper<br> Government Influence<br> in Civil Justice",
-    "8.6" = "Improper<br> Government Influence<br> in Criminal Justice",
-    "7.1" = "Access to <br> and Affordability<br> of Civil Justice",
-    "8.4" = "Impartiality in <br> Criminal Justice",
-    "4.1" = "Equality<br> and Discrimination",
-    "7.2" = "Discrimination<br> in Civil Justice",
-    "4.8" = "Labor Rights",
-    "6.4" = "Due Process is <br> Respected in<br>Administrative Proceedings",
-    "4.2" = "The Right to <br>Life and Security of<br>the Person is Effectively<br> Guaranteed",
-    "6.3" = "Administrative <br>Proceedings are Conducted <br>without Unreasonable Delay",
-    "4.7" = "Freedom of <br> Assembly and Association",
-    "4.4" = "Freedom of <br> Expression and <br> Opinion",
-    "4.5" = "Freedom of <br> Belief and Religion",
-    "4.6" = "Freedom from <br> Interference with <br> Privacy",
-    "6.5" = "Protection from <br>Expropriation without <br>Due Process"
+    "1.5" = "Non-governmental checks<br> of government power",
+    "3.3" = "Civic participation",
+    "3.4" = "Access to complaint<br> mechanisms",
+    "3.2" = "Right to <br> information",
+    "4.3" = "Due process of<br>the law and rights<br> of the accused",
+    "7.4" = "Improper<br> government influence<br> in civil justice",
+    "8.6" = "Improper<br> government influence<br> in criminal justice",
+    "7.1" = "Access to <br> and affordability<br> of civil justice",
+    "8.4" = "Impartiality in <br> criminal justice",
+    "4.1" = "Equality<br> and discrimination",
+    "7.2" = "Discrimination<br> in civil justice",
+    "4.8" = "Labor rights",
+    "6.4" = "Due process is <br> respected in<br>administrative proceedings",
+    "4.2" = "The right to <br>life and security of<br>the person is effectively<br> guaranteed",
+    "6.3" = "Administrative <br>proceedings are conducted <br>without unreasonable delay",
+    "4.7" = "Freedom of <br> assembly and association",
+    "4.4" = "Freedom of <br> expression and <br> opinion",
+    "4.5" = "Freedom of <br> belief and religion",
+    "4.6" = "Freedom from <br> interference with <br> privacy",
+    "6.5" = "Protection from <br>expropriation without <br>due process"
   )
   
   # Format wrapped labels for dumbbells
@@ -210,9 +210,9 @@ wrangleData <- function(figid) {
   
   # For radar plots (2015 and 2024 values)
   if (type == "radar") {
+    
     data2join <- master_data %>%
-      filter(Year %in% c(2020
-                         , 2024) & Country == 'Thailand') %>%
+      filter(Year %in% c(2020, 2024) & Country == 'Thailand') %>%
       select(Year, all_of(variables)) %>%
       pivot_longer(cols = all_of(variables), names_to = "Metric", values_to = "Value") %>%
       mutate(Value = as.numeric(Value)) %>%  # Convert Value to numeric
@@ -222,7 +222,7 @@ wrangleData <- function(figid) {
       mutate(
         label_var = recode(Metric, !!!metric_labels),
         Metric = as.factor(Metric),
-        figure = if_else(Year == "2024", paste0(round(Value, 2)), NA_character_),
+        figure = if_else(Year == "2024", sprintf("%.2f", Value), NA_character_),  # Use sprintf() for two decimals
         latestYear = "2024"
       ) %>%
       arrange(Metric, Year, Value) %>%
@@ -232,7 +232,7 @@ wrangleData <- function(figid) {
       ungroup()
     
     figure2.df <- data2join %>%
-      mutate(figure2 = if_else(Year == "2020", paste0(round(Value, 2)), NA_character_)) %>%
+      mutate(figure2 = if_else(Year == "2020", sprintf("%.2f", Value), NA_character_)) %>%  # Use sprintf() for two decimals
       drop_na(figure2) %>%
       select(Metric, figure2)
     
@@ -257,6 +257,7 @@ wrangleData <- function(figid) {
       arrange(desc(as.numeric(Year))) %>%
       select(-order_var.x) %>%
       rename(order_var = order_var.y)
+
   }
   
   # For slope plots (2015 and 2024 values)

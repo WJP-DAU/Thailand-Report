@@ -13,7 +13,7 @@ thailand_bars <- function(
       target_var   = all_of(target),
       grouping_var = all_of(grouping)
     ) %>%
-    mutate(grouping_var = factor(grouping_var, levels = c("2024", "2015")))
+    mutate(grouping_var = factor(grouping_var, levels = c("2024", "2020")))
     
   
   # Optional label column renaming
@@ -41,7 +41,7 @@ thailand_bars <- function(
     scale_y_continuous(limits = c(0, 1)) +
     
     # Adjust X-axis labels to have specific colors
-    scale_x_discrete(labels = c("2024" = "2024", "2015" = "2015")) +
+    scale_x_discrete(labels = c("2024" = "2024", "2020" = "2020")) +
     labs(y = NULL, x = NULL) +
     WJP_theme() +
     theme(
